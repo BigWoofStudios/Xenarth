@@ -37,13 +37,9 @@ private:
 	void MoveTriggered();
 	void MoveReleased(const FInputActionInstance& ActionData);
 
-	void AutoRunToCachedDestination();
-
 	FVector CachedDestination = FVector::ZeroVector;
-	float FollowTime = 0.0f;
 	float ShortPressThreshold = 0.5f;
 	bool bAutoRunning = false;
-	bool bTargeting = false;
 
 	UPROPERTY(EditDefaultsOnly, Category=Movement)
 	float AutoRunAcceptanceRadius  = 20.f;

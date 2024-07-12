@@ -60,17 +60,17 @@ void AXenPlayerController::CursorTrace()
 void AXenPlayerController::AutoRun()
 {
 	if (!bAutoRunning) return;
-	if (APawn* ControlledPawn = GetPawn())
-	{
-		const FVector LocationOnSpline = MovementSpline->FindLocationClosestToWorldLocation(ControlledPawn->GetActorLocation(), ESplineCoordinateSpace::World);
-		const FVector Direction = MovementSpline->FindDirectionClosestToWorldLocation(LocationOnSpline, ESplineCoordinateSpace::World);
-		ControlledPawn->AddMovementInput(Direction);
+	
+	APawn* ControlledPawn = GetPawn();
+	if (!ControlledPawn) return;
+	
+	const FVector LocationOnSpline = MovementSpline->FindLocationClosestToWorldLocation(ControlledPawn->GetActorLocation(), ESplineCoordinateSpace::World);
+	const FVector Direction = MovementSpline->FindDirectionClosestToWorldLocation(LocationOnSpline, ESplineCoordinateSpace::World);
+	ControlledPawn->AddMovementInput(Direction);
 
-		const float DistanceToDestination = (LocationOnSpline - CachedDestination).Length();
-		if (DistanceToDestination <= AutoRunAcceptanceRadius)
-		{
-			bAutoRunning = false;
-		}
+	if ((LocationOnSpline - CachedDestination).Length() <= AutoRunAcceptanceRadius)
+	{
+		bAutoRunning = false;
 	}
 }
 
@@ -83,9 +83,24 @@ void AXenPlayerController::MoveStarted()
 void AXenPlayerController::MoveReleased(const FInputActionInstance& ActionData)
 {
 	// Must also not have an ability queued... TBD
-	if (ActionData.GetElapsedTime() <= ShortPressThreshold)
+	if (ActionData.GetElapsedTime() > ShortPressThreshold) return;
+	
+	const APawn* ControlledPawn = GetPawn();
+	if (!ControlledPawn) return;
+	
+	if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(), CachedDestination))
 	{
-		AutoRunToCachedDestination();
+		MovementSpline->ClearSplinePoints();
+		for (const FVector& PointLoc : NavPath->PathPoints)
+		{
+			MovementSpline->AddSplinePoint(PointLoc, ESplineCoordinateSpace::World);
+		}
+	
+		if (NavPath->PathPoints.Num() > 0)
+		{
+			CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() - 1];
+			bAutoRunning = true;
+		}
 	}
 }
 
@@ -99,24 +114,3 @@ void AXenPlayerController::MoveTriggered()
 	}
 }
 
-void AXenPlayerController::AutoRunToCachedDestination()
-{
-	if (const APawn* ControlledPawn = GetPawn())
-	{
-		if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(), CachedDestination))
-		{
-			MovementSpline->ClearSplinePoints();
-			for (const FVector& PointLoc : NavPath->PathPoints)
-			{
-				MovementSpline->AddSplinePoint(PointLoc, ESplineCoordinateSpace::World);
-			}
-			
-			if (NavPath->PathPoints.Num() > 0)
-			{
-				CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() - 1];
-				bAutoRunning = true;
-			}
-		}
-	}
-	bTargeting = false;
-}
