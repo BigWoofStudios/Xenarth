@@ -77,10 +77,12 @@ void AXenPlayerController::AutoRun()
 void AXenPlayerController::MoveStarted()
 {
 	bAutoRunning = false;
+	StopMovement();
 }
 
 void AXenPlayerController::MoveReleased(const FInputActionInstance& ActionData)
 {
+	// Must also not have an ability queued... TBD
 	if (ActionData.GetElapsedTime() <= ShortPressThreshold)
 	{
 		AutoRunToCachedDestination();
