@@ -13,12 +13,13 @@ public class Xenimus : ModuleRules
 			"Core", "CoreUObject", "Engine",
 			"InputCore", "EnhancedInput",
 			"NetCore",
-			"MotionWarping", "MotionTrajectory"
+			"MotionWarping", "MotionTrajectory",
+			"GameplayAbilities"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
-			"GameplayAbilities", "GameplayTags", "GameplayTasks",
+			"GameplayTags", "GameplayTasks",
 			"ModularGameplay", "GameFeatures",
 			"Niagara",
 			"OnlineSubsystem", "OnlineSubsystemSteam",

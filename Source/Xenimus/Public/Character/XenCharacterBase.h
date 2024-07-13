@@ -3,27 +3,29 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "XenCharacterBase.generated.h"
 
+class UAbilitySystemComponent;
+class UAttributeSet;
+
 UCLASS()
-class XENIMUS_API AXenCharacterBase : public ACharacter
+class XENIMUS_API AXenCharacterBase : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
-
 public:
-	// Sets default values for this character's properties
 	AXenCharacterBase();
 
+#pragma region IAbilitySystemInterface
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+#pragma endregion
+	
+	UAttributeSet* GetAttributeSet() const { return AttributeSet; };
+
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	UPROPERTY() TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+	UPROPERTY() TObjectPtr<UAttributeSet> AttributeSet;
 };

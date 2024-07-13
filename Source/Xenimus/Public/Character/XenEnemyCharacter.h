@@ -13,5 +13,9 @@ UCLASS()
 class XENIMUS_API AXenEnemyCharacter : public AXenCharacterBase
 {
 	GENERATED_BODY()
-	
+public:
+	AXenEnemyCharacter();
+
+protected:
+	virtual void BeginPlay() override;
 };
