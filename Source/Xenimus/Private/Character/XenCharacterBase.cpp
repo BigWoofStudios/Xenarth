@@ -15,11 +15,10 @@ AXenCharacterBase::AXenCharacterBase()
 void AXenCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
-void AXenCharacterBase::Tick(float DeltaTime)
+void AXenCharacterBase::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 

@@ -1,6 +1,6 @@
 // Copyright Big Woof Studios
 
-#include "XenGameplayEffectContext.h"
+#include "AbilitySystem/XenGameplayEffectContext.h"
 
 bool FXenGameplayEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool& bOutSuccess)
 {
