@@ -1,4 +1,4 @@
-// Copyright Big Woof Studios
+// Copyright Big Woof Studios, LLC. All Rights Reserved.
 
 #include "AbilitySystem/XenGameplayEffectContext.h"
 
