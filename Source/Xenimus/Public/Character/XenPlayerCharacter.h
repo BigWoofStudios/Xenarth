@@ -6,6 +6,8 @@
 #include "Character/XenCharacterBase.h"
 #include "XenPlayerCharacter.generated.h"
 
+class USpringArmComponent;
+class UCameraComponent;
 /**
  * 
  */
@@ -24,4 +26,10 @@ public:
 	
 private:
 	void InitAbilityActorInfo();
+	
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UCameraComponent> TopDownCameraComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USpringArmComponent> CameraBoom;
 };
