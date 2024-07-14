@@ -3,13 +3,13 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class XenimusEditorTarget : TargetRules
+public class XenarthEditorTarget : TargetRules
 {
-	public XenimusEditorTarget(TargetInfo Target) : base(Target)
+	public XenarthEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V5;
 
-		ExtraModuleNames.AddRange( new string[] { "Xenimus" } );
+		ExtraModuleNames.AddRange( new string[] { "Xenarth" } );
 	}
 }

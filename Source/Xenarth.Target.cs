@@ -3,14 +3,14 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class XenimusTarget : TargetRules
+public class XenarthTarget : TargetRules
 {
-	public XenimusTarget(TargetInfo Target) : base(Target)
+	public XenarthTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V5;
         bUsesSteam = true;
 
-        ExtraModuleNames.AddRange( new string[] { "Xenimus" } );
+        ExtraModuleNames.AddRange( new string[] { "Xenarth" } );
 	}
 }
