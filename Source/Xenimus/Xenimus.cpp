@@ -5,4 +5,4 @@
 
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, Xenimus, "Xenimus" );
 
-DEFINE_LOG_CATEGORY(Xenimus)
+DEFINE_LOG_CATEGORY(LogXen)

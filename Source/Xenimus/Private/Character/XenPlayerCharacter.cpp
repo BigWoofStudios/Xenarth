@@ -33,12 +33,14 @@ AXenPlayerCharacter::AXenPlayerCharacter()
 void AXenPlayerCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+	// Init on server
 	InitAbilityActorInfo();
 }
 
 void AXenPlayerCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
+	// Init on client
 	InitAbilityActorInfo();
 }
 

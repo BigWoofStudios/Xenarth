@@ -1,36 +1,90 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Big Woof Studios, LLC. All Rights Reserved.
 
 
 #include "Player/XenPlayerController.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
+#include "XenGameplayTags.h"
 #include "Components/SplineComponent.h"
 #include "Input/XenInputComponent.h"
+#include "Net/UnrealNetwork.h"
+#include "Xenimus/Xenimus.h"
 
 AXenPlayerController::AXenPlayerController()
 {
 	bReplicates = true;
 	MovementSpline = CreateDefaultSubobject<USplineComponent>("MovementSpline");
+
+	// Tags that the ASC can have that will prevent controlled character movement
+	BlockMovementTags.AddTagFast(FXenGameplayTags::Status_Attribute_Life_Empty);
+	BlockMovementTags.AddTagFast(FXenGameplayTags::Status_Ability_Queued);
 }
 
 void AXenPlayerController::PlayerTick(const float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
-	CursorTrace();
+	GetHitResultUnderCursor(ECC_Visibility, true, CursorHit);
 	AutoRun();
+}
+
+void AXenPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	FDoRepLifetimeParams Parameters;
+	
+	Parameters.bIsPushBased = true;
+	Parameters.RepNotifyCondition = REPNOTIFY_OnChanged;
+	DOREPLIFETIME_WITH_PARAMS_FAST(ThisClass, bCanMove, Parameters);
+}
+
+void AXenPlayerController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+	AbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(InPawn);
+
+	UE_LOG(LogXen, Verbose, TEXT("Possessing %s with ASC %s"), *InPawn->GetName(), *AbilitySystemComponent->GetName());
+	
+	if (AbilitySystemComponent)
+	{
+		OnCheckIfCanMove = AbilitySystemComponent->RegisterGenericGameplayTagEvent().AddLambda([this](const FGameplayTag InTag, int32)
+		{
+			if (!BlockMovementTags.HasTagExact(InTag)) return;
+			
+			const bool bNewValue = AbilitySystemComponent->HasAnyMatchingGameplayTags(BlockMovementTags);
+			if (bNewValue == bCanMove) return;
+			
+            bCanMove = bNewValue;
+            MARK_PROPERTY_DIRTY_FROM_NAME(ThisClass, bCanMove, this);
+		});
+	}
+}
+
+void AXenPlayerController::OnUnPossess()
+{
+	AbilitySystemComponent = nullptr;
+	OnCheckIfCanMove.Reset();
+	
+	Super::OnUnPossess();
+}
+
+UAbilitySystemComponent* AXenPlayerController::GetAbilitySystemComponent()
+{
+	if (AbilitySystemComponent == nullptr)
+	{
+		AbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn());
+	}
+
+	return AbilitySystemComponent;
 }
 
 void AXenPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	checkf(XenInputMappingContext, TEXT("XenInputMappingContext is not set in %s"), *GetName());
-	
-	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
-	{
-		Subsystem->AddMappingContext(XenInputMappingContext, 0);
-	}
 	
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
@@ -45,16 +99,15 @@ void AXenPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
+	checkf(Subsystem, TEXT("Enhanced Input Subsystem is not available in %s"), *GetName());
+	Subsystem->AddMappingContext(XenInputMappingContext, 0);
+	
 	UXenInputComponent* XenInputComponent = CastChecked<UXenInputComponent>(InputComponent);
 	XenInputComponent->BindAction(MoveAction, ETriggerEvent::Started, this, &AXenPlayerController::MoveStarted);
 	XenInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AXenPlayerController::MoveTriggered);
 	XenInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &AXenPlayerController::MoveReleased);
 	XenInputComponent->BindAction(MoveAction, ETriggerEvent::Canceled, this, &AXenPlayerController::MoveReleased);
-}
-
-void AXenPlayerController::CursorTrace()
-{
-	GetHitResultUnderCursor(ECC_Visibility, true, CursorHit);
 }
 
 void AXenPlayerController::AutoRun()
@@ -82,7 +135,7 @@ void AXenPlayerController::MoveStarted()
 
 void AXenPlayerController::MoveReleased(const FInputActionInstance& ActionData)
 {
-	// Must also not have an ability queued... TBD
+	if (!bCanMove) return;
 	if (ActionData.GetElapsedTime() > ShortPressThreshold) return;
 	
 	const APawn* ControlledPawn = GetPawn();
@@ -106,6 +159,7 @@ void AXenPlayerController::MoveReleased(const FInputActionInstance& ActionData)
 
 void AXenPlayerController::MoveTriggered()
 {
+	if (!bCanMove) return;
 	if (CursorHit.bBlockingHit) CachedDestination = CursorHit.ImpactPoint;
 	if (APawn* ControlledPawn = GetPawn())
 	{

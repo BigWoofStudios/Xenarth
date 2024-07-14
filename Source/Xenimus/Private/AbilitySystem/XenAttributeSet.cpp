@@ -11,25 +11,47 @@
 
 UXenAttributeSet::UXenAttributeSet()
 {
-	TagToAttribute.Add(FXenGameplayTags::Attribute_Vital_Health, GetHealthAttribute);
-	TagToAttribute.Add(FXenGameplayTags::Attribute_Vital_MaxHealth, GetMaxHealthAttribute);
+#pragma region Vital Attributes
+	TagToAttribute.Add(FXenGameplayTags::Attribute_Vital_Life, GetLifeAttribute);
+	TagToAttribute.Add(FXenGameplayTags::Attribute_Vital_MaxLife, GetMaxLifeAttribute);
+	TagToAttribute.Add(FXenGameplayTags::Attribute_Vital_Mana, GetManaAttribute);
+	TagToAttribute.Add(FXenGameplayTags::Attribute_Vital_MaxMana, GetMaxManaAttribute);
+#pragma endregion 
+	
+#pragma region Primary Attributes
+	TagToAttribute.Add(FXenGameplayTags::Attribute_Primary_Power, GetPowerAttribute);
+	TagToAttribute.Add(FXenGameplayTags::Attribute_Primary_Dexterity, GetDexterityAttribute);
+	TagToAttribute.Add(FXenGameplayTags::Attribute_Primary_Vitality, GetVitalityAttribute);
+	TagToAttribute.Add(FXenGameplayTags::Attribute_Primary_Acuity, GetAcuityAttribute);
+	TagToAttribute.Add(FXenGameplayTags::Attribute_Primary_Wisdom, GetWisdomAttribute);
+#pragma endregion
+	
 }
-
 void UXenAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, Health, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
+#pragma region Vital Attributes
+	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, Life, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, MaxLife, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, Mana, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
+#pragma endregion
+	
+#pragma region Primary Attributes
+	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, Power, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, Dexterity, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, Vitality, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, Acuity, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, Wisdom, COND_None, REPNOTIFY_Always);
+#pragma endregion 
 }
-
 void UXenAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
 	Super::PreAttributeChange(Attribute, NewValue);
 	
-	if (Attribute == GetHealthAttribute()) NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHealth());
+	if (Attribute == GetLifeAttribute()) NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxLife());
+	if (Attribute == GetManaAttribute()) NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxMana());
 }
-
 void UXenAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
@@ -42,19 +64,18 @@ void UXenAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 		DamagePostGameplayEffect(Props);
 	}
 	
-	if (TSet{GetHealthAttribute(), GetMaxHealthAttribute()}.Contains(Data.EvaluatedData.Attribute))
+	if (TSet{GetLifeAttribute(), GetMaxLifeAttribute()}.Contains(Data.EvaluatedData.Attribute))
 	{
-		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
+		SetLife(FMath::Clamp(GetLife(), 0.f, GetMaxLife()));
 	}
+	LifePostGameplayEffect();
 	
-	HealthPostGameplayEffect();
+	if (TSet{GetManaAttribute(), GetMaxManaAttribute()}.Contains(Data.EvaluatedData.Attribute))
+	{
+		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
+	}
+	ManaPostGameplayEffect();
 }
-
-void UXenAttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)
-{
-	Super::PostAttributeChange(Attribute, OldValue, NewValue);
-}
-
 void UXenAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props)
 {
 	Props.EffectContextHandle = Data.EffectSpec.GetContext();
@@ -84,7 +105,6 @@ void UXenAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData&
 		Props.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Props.TargetAvatarActor);
 	}
 }
-
 void UXenAttributeSet::DamagePostGameplayEffect(const FEffectProperties& Props)
 {
 	const float LocalIncomingDamage = GetIncomingDamage();
@@ -96,10 +116,10 @@ void UXenAttributeSet::DamagePostGameplayEffect(const FEffectProperties& Props)
 	if (LocalIncomingDamage > 0.f)
 	{
 		FGameplayTagContainer TagContainer;
-		const float NewHealth = GetHealth() - LocalIncomingDamage;
-		SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
+		const float NewLife = GetLife() - LocalIncomingDamage;
+		SetLife(FMath::Clamp(NewLife, 0.f, GetMaxLife()));
 
-		if (NewHealth <= 0.f)
+		if (NewLife <= 0.f)
 		{
 			// TagContainer.AddTagFast(FXenGameplayTags::GameplayAbility_Death);
 			Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
@@ -114,10 +134,13 @@ void UXenAttributeSet::DamagePostGameplayEffect(const FEffectProperties& Props)
 	// ShowFloatingText(Props, LocalIncomingDamage, bCriticalHit);
 }
 
-void UXenAttributeSet::OnRep_Health(const FGameplayAttributeData& OldValue) const  { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Health, OldValue); }
-void UXenAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldValue) const  { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, MaxHealth, OldValue); }
-
-void UXenAttributeSet::HealthPostGameplayEffect() const
+// -----------------------------------------------------------------------------------------------------------------
+// Vital Attributes
+// -----------------------------------------------------------------------------------------------------------------
+#pragma region Vital Attributes
+void UXenAttributeSet::OnRep_Life(const FGameplayAttributeData& OldValue) const  { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Life, OldValue); }
+void UXenAttributeSet::OnRep_MaxLife(const FGameplayAttributeData& OldValue) const  { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, MaxLife, OldValue); }
+void UXenAttributeSet::LifePostGameplayEffect() const
 {
 	const UAbilitySystemComponent *ASC = GetOwningAbilitySystemComponent();
 	if (!ASC) return;
@@ -125,25 +148,67 @@ void UXenAttributeSet::HealthPostGameplayEffect() const
 	AActor* OwningActor = GetOwningActor();
 	if (!OwningActor) return;
 	
-	const bool bIsEmpty = ASC->HasMatchingGameplayTag(FXenGameplayTags::Status_Attribute_Health_Empty);
-	const bool bIsFull = ASC->HasMatchingGameplayTag(FXenGameplayTags::Status_Attribute_Health_Full);
+	const bool bIsEmpty = ASC->HasMatchingGameplayTag(FXenGameplayTags::Status_Attribute_Life_Empty);
+	const bool bIsFull = ASC->HasMatchingGameplayTag(FXenGameplayTags::Status_Attribute_Life_Full);
 	
-	if (GetHealth() <= 0.f && !bIsEmpty)
+	if (GetLife() <= 0.f && !bIsEmpty)
 	{
-		UAbilitySystemBlueprintLibrary::AddLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Health_Empty}, true);
+		UAbilitySystemBlueprintLibrary::AddLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Life_Empty}, true);
 	}
-	else if (GetHealth() > 0.f && bIsEmpty)
+	else if (GetLife() > 0.f && bIsEmpty)
 	{
-		UAbilitySystemBlueprintLibrary::RemoveLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Health_Empty}, true);
+		UAbilitySystemBlueprintLibrary::RemoveLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Life_Empty}, true);
 	}
 
-	if (GetHealth() >= GetMaxHealth() && !bIsFull)
+	if (GetLife() >= GetMaxLife() && !bIsFull)
 	{
-		UAbilitySystemBlueprintLibrary::AddLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Health_Full}, true);
+		UAbilitySystemBlueprintLibrary::AddLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Life_Full}, true);
 	}
-	else if (GetHealth() < GetMaxHealth() && bIsFull)
+	else if (GetLife() < GetMaxLife() && bIsFull)
 	{
-		UAbilitySystemBlueprintLibrary::RemoveLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Health_Full}, true);
+		UAbilitySystemBlueprintLibrary::RemoveLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Life_Full}, true);
 	}
 }
+void UXenAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldValue) const  { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Mana, OldValue); }
+void UXenAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldValue) const  { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, MaxMana, OldValue); }
+void UXenAttributeSet::ManaPostGameplayEffect() const
+{
+	const UAbilitySystemComponent *ASC = GetOwningAbilitySystemComponent();
+	if (!ASC) return;
 
+	AActor* OwningActor = GetOwningActor();
+	if (!OwningActor) return;
+	
+	const bool bIsEmpty = ASC->HasMatchingGameplayTag(FXenGameplayTags::Status_Attribute_Mana_Empty);
+	const bool bIsFull = ASC->HasMatchingGameplayTag(FXenGameplayTags::Status_Attribute_Mana_Full);
+	
+	if (GetMana() <= 0.f && !bIsEmpty)
+	{
+		UAbilitySystemBlueprintLibrary::AddLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Mana_Empty}, true);
+	}
+	else if (GetMana() > 0.f && bIsEmpty)
+	{
+		UAbilitySystemBlueprintLibrary::RemoveLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Mana_Empty}, true);
+	}
+
+	if (GetMana() >= GetMaxMana() && !bIsFull)
+	{
+		UAbilitySystemBlueprintLibrary::AddLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Mana_Full}, true);
+	}
+	else if (GetMana() < GetMaxMana() && bIsFull)
+	{
+		UAbilitySystemBlueprintLibrary::RemoveLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Mana_Full}, true);
+	}
+}
+#pragma endregion
+
+// -----------------------------------------------------------------------------------------------------------------
+// Primary Attributes
+// -----------------------------------------------------------------------------------------------------------------
+#pragma region Primary Attributes
+void UXenAttributeSet::OnRep_Power(const FGameplayAttributeData& OldValue) const {GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Power, OldValue); }
+void UXenAttributeSet::OnRep_Dexterity(const FGameplayAttributeData& OldValue) const {GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Dexterity, OldValue); }
+void UXenAttributeSet::OnRep_Vitality(const FGameplayAttributeData& OldValue) const {GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Vitality, OldValue); }
+void UXenAttributeSet::OnRep_Acuity(const FGameplayAttributeData& OldValue) const {GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Acuity, OldValue); }
+void UXenAttributeSet::OnRep_Wisdom(const FGameplayAttributeData& OldValue) const {GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Wisdom, OldValue); }
+#pragma endregion 
