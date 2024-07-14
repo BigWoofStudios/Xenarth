@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class XENARTH_API UXenGameInstance : public UGameInstance
 {
 	GENERATED_BODY()

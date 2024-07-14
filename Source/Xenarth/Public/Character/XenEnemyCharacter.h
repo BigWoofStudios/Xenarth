@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class XENARTH_API AXenEnemyCharacter : public AXenCharacterBase
 {
 	GENERATED_BODY()

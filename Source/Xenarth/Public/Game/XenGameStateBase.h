@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class XENARTH_API AXenGameStateBase : public AGameStateBase
 {
 	GENERATED_BODY()

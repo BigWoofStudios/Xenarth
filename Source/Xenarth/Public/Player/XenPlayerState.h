@@ -13,7 +13,7 @@ class UAbilitySystemComponent;
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class XENARTH_API AXenPlayerState : public APlayerState, public IAbilitySystemInterface
 {
 	GENERATED_BODY()

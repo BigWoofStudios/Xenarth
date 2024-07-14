@@ -13,7 +13,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class XENARTH_API AXenPlayerController : public APlayerController
 {
 	GENERATED_BODY()

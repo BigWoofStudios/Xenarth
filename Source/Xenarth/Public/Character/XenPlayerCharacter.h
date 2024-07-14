@@ -11,7 +11,7 @@ class UCameraComponent;
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class XENARTH_API AXenPlayerCharacter : public AXenCharacterBase
 {
 	GENERATED_BODY()
