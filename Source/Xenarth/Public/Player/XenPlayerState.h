@@ -14,7 +14,7 @@ class UAbilitySystemComponent;
  * 
  */
 UCLASS()
-class Xenarth_API AXenPlayerState : public APlayerState, public IAbilitySystemInterface
+class XENARTH_API AXenPlayerState : public APlayerState, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 public:

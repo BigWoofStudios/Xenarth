@@ -12,7 +12,7 @@ class UCameraComponent;
  * 
  */
 UCLASS()
-class Xenarth_API AXenPlayerCharacter : public AXenCharacterBase
+class XENARTH_API AXenPlayerCharacter : public AXenCharacterBase
 {
 	GENERATED_BODY()
 public:

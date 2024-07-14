@@ -8,25 +8,25 @@
 namespace FXenGameplayTags
 {
 #pragma region Vital Attributes
-	Xenarth_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Vital_Life);
-	Xenarth_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Vital_MaxLife);
-	Xenarth_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Vital_Mana);
-	Xenarth_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Vital_MaxMana);
+	XENARTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Vital_Life);
+	XENARTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Vital_MaxLife);
+	XENARTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Vital_Mana);
+	XENARTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Vital_MaxMana);
 #pragma endregion
 
 #pragma region Primary Attributes
-	Xenarth_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Primary_Power);
-	Xenarth_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Primary_Dexterity);
-	Xenarth_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Primary_Vitality);
-	Xenarth_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Primary_Acuity);
-	Xenarth_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Primary_Wisdom);
+	XENARTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Primary_Power);
+	XENARTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Primary_Dexterity);
+	XENARTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Primary_Vitality);
+	XENARTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Primary_Acuity);
+	XENARTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attribute_Primary_Wisdom);
 #pragma endregion
 
 #pragma region Statuses
-	Xenarth_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Attribute_Life_Full);
-	Xenarth_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Attribute_Life_Empty);
-	Xenarth_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Attribute_Mana_Full);
-	Xenarth_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Attribute_Mana_Empty);
-	Xenarth_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Ability_Queued);
+	XENARTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Attribute_Life_Full);
+	XENARTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Attribute_Life_Empty);
+	XENARTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Attribute_Mana_Full);
+	XENARTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Attribute_Mana_Empty);
+	XENARTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Ability_Queued);
 #pragma endregion 
 }

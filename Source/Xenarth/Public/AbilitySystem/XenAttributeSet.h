@@ -39,7 +39,7 @@ using TStaticFuncPtr = typename TBaseStaticDelegateInstance<T, FDefaultDelegateU
  * 
  */
 UCLASS()
-class Xenarth_API UXenAttributeSet : public UAttributeSet
+class XENARTH_API UXenAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 public:

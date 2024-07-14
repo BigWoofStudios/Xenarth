@@ -14,7 +14,7 @@
  * 
  */
 UCLASS()
-class Xenarth_API AXenPlayerController : public APlayerController
+class XENARTH_API AXenPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 public:

@@ -12,7 +12,7 @@ class UAbilitySystemComponent;
 class UAttributeSet;
 
 UCLASS()
-class Xenarth_API AXenCharacterBase : public ACharacter, public IAbilitySystemInterface
+class XENARTH_API AXenCharacterBase : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 public:

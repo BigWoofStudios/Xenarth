@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class Xenarth_API AXenGameStateBase : public AGameStateBase
+class XENARTH_API AXenGameStateBase : public AGameStateBase
 {
 	GENERATED_BODY()
 	

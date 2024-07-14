@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class Xenarth_API UXenAbilitySystemComponent : public UAbilitySystemComponent
+class XENARTH_API UXenAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
 	
