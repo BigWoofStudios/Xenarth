@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class XENIMUS_API UXenInputComponent : public UEnhancedInputComponent
+class Xenarth_API UXenInputComponent : public UEnhancedInputComponent
 {
 	GENERATED_BODY()
 	

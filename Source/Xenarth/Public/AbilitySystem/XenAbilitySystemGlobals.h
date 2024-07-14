@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class XENIMUS_API UXenAbilitySystemGlobals : public UAbilitySystemGlobals
+class Xenarth_API UXenAbilitySystemGlobals : public UAbilitySystemGlobals
 {
 	GENERATED_BODY()
     UXenAbilitySystemGlobals();

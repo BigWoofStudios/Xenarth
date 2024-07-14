@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class XENIMUS_API AXenEnemyCharacter : public AXenCharacterBase
+class Xenarth_API AXenEnemyCharacter : public AXenCharacterBase
 {
 	GENERATED_BODY()
 public:

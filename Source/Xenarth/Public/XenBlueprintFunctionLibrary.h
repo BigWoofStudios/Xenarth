@@ -9,7 +9,7 @@
 DECLARE_DYNAMIC_DELEGATE_OneParam(FGameFeaturePluginChangeStateCompleteBP, const bool, bSuccess);
 
 UCLASS(BlueprintType)
-class XENIMUS_API UXenBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
+class Xenarth_API UXenBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()
 

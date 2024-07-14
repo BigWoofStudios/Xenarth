@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class Xenimus : ModuleRules
+public class Xenarth : ModuleRules
 {
-	public Xenimus(ReadOnlyTargetRules target) : base(target)
+	public Xenarth(ReadOnlyTargetRules target) : base(target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	

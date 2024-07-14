@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class XENIMUS_API UXenGameInstance : public UGameInstance
+class Xenarth_API UXenGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 	

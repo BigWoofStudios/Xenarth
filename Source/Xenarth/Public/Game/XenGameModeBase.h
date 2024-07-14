@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameStateBase.h"
-#include "XenGameStateBase.generated.h"
+#include "GameFramework/GameModeBase.h"
+#include "XenGameModeBase.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class XENIMUS_API AXenGameStateBase : public AGameStateBase
+class Xenarth_API AXenGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
