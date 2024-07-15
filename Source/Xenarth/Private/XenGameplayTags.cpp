@@ -10,8 +10,10 @@ namespace FXenGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Attribute_Vital_MaxLife, FName{TEXT("Attribute.Vital.MaxLife")});
 	UE_DEFINE_GAMEPLAY_TAG(Attribute_Vital_Mana, FName{TEXT("Attribute.Vital.Mana")});
 	UE_DEFINE_GAMEPLAY_TAG(Attribute_Vital_MaxMana, FName{TEXT("Attribute.Vital.MaxMana")});
+	UE_DEFINE_GAMEPLAY_TAG(Attribute_Vital_Stamina, FName{TEXT("Attribute.Vital.Stamina")});
+	UE_DEFINE_GAMEPLAY_TAG(Attribute_Vital_MaxStamina, FName{TEXT("Attribute.Vital.MaxStamina")});
 #pragma endregion
-	
+
 #pragma region Primary Attributes
 	UE_DEFINE_GAMEPLAY_TAG(Attribute_Primary_Power, FName{TEXT("Attribute.Primary.Power")});
 	UE_DEFINE_GAMEPLAY_TAG(Attribute_Primary_Dexterity, FName{TEXT("Attribute.Primary.Dexterity")});
@@ -19,12 +21,19 @@ namespace FXenGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Attribute_Primary_Acuity, FName{TEXT("Attribute.Primary.Acuity")});
 	UE_DEFINE_GAMEPLAY_TAG(Attribute_Primary_Wisdom, FName{TEXT("Attribute.Primary.Wisdom")});
 #pragma endregion
-	
+
+#pragma region Secondary Attributes
+	UE_DEFINE_GAMEPLAY_TAG(Attribute_Secondary_MovementSpeed, FName{TEXT("Attribute.Secondary.MovementSpeed")});
+	UE_DEFINE_GAMEPLAY_TAG(Attribute_Secondary_MaxMovementSpeed, FName{TEXT("Attribute.Secondary.MaxMovementSpeed")});
+#pragma endregion
+
 #pragma region Statuses
 	UE_DEFINE_GAMEPLAY_TAG(Status_Attribute_Life_Full, FName{TEXT("Status.Attribute.Life.Full")});
 	UE_DEFINE_GAMEPLAY_TAG(Status_Attribute_Life_Empty, FName{TEXT("Status.Attribute.Life.Empty")});
 	UE_DEFINE_GAMEPLAY_TAG(Status_Attribute_Mana_Full, FName{TEXT("Status.Attribute.Mana.Full")});
 	UE_DEFINE_GAMEPLAY_TAG(Status_Attribute_Mana_Empty, FName{TEXT("Status.Attribute.Mana.Empty")});
+	UE_DEFINE_GAMEPLAY_TAG(Status_Attribute_Stamina_Full, FName{TEXT("Status.Attribute.Stamina.Full")});
+	UE_DEFINE_GAMEPLAY_TAG(Status_Attribute_Stamina_Empty, FName{TEXT("Status.Attribute.Stamina.Empty")});
 	
 	UE_DEFINE_GAMEPLAY_TAG(Status_Ability_Queued, FName{TEXT("Status.Ability.Queued")});
 #pragma endregion

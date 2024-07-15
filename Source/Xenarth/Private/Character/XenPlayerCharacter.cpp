@@ -11,6 +11,7 @@
 
 AXenPlayerCharacter::AXenPlayerCharacter()
 {
+	// Align player character mesh with forward direction and capsule component
 	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
 	GetMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 	
@@ -23,8 +24,8 @@ AXenPlayerCharacter::AXenPlayerCharacter()
 
 	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>("TopDownCameraComponent");
 	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	
 	TopDownCameraComponent->bUsePawnControlRotation = false;
+	
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->bConstrainToPlane = true;
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;

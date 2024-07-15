@@ -19,14 +19,10 @@ class XENARTH_API AXenPlayerState : public APlayerState, public IAbilitySystemIn
 	GENERATED_BODY()
 public:
 	AXenPlayerState();
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
+	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 	
-#pragma region IAbilitySystemInterface
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-#pragma endregion
-	
-	UAttributeSet* GetAttributeSet() const { return AttributeSet; };
-	
-protected:
-	UPROPERTY() TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
-	UPROPERTY() TObjectPtr<UAttributeSet> AttributeSet;
+private:
+	UPROPERTY(VisibleAnywhere, Category=AbilitySystem) TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+	UPROPERTY(VisibleAnywhere, Category=AbilitySystem) TObjectPtr<UAttributeSet> AttributeSet;
 };

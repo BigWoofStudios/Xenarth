@@ -64,12 +64,16 @@ public:
 	ATTRIBUTE_ACCESSORS(UXenAttributeSet, MaxLife);
 	ATTRIBUTE_ACCESSORS(UXenAttributeSet, Mana);
 	ATTRIBUTE_ACCESSORS(UXenAttributeSet, MaxMana);
+	ATTRIBUTE_ACCESSORS(UXenAttributeSet, Stamina);
+	ATTRIBUTE_ACCESSORS(UXenAttributeSet, MaxStamina);
 
 protected:
 	UFUNCTION() void OnRep_Life(const FGameplayAttributeData &OldValue) const;
 	UFUNCTION() void OnRep_MaxLife(const FGameplayAttributeData &OldValue) const;
 	UFUNCTION() void OnRep_Mana(const FGameplayAttributeData &OldValue) const;
 	UFUNCTION() void OnRep_MaxMana(const FGameplayAttributeData &OldValue) const;
+	UFUNCTION() void OnRep_Stamina(const FGameplayAttributeData &OldValue) const;
+	UFUNCTION() void OnRep_MaxStamina(const FGameplayAttributeData &OldValue) const;
 	
 private:
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_Life, Category = "Attribute|Vital")
@@ -80,9 +84,14 @@ private:
 	FGameplayAttributeData Mana;
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_MaxMana, Category = "Attribute|Vital")
 	FGameplayAttributeData MaxMana;
+	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_Stamina, Category = "Attribute|Vital")
+	FGameplayAttributeData Stamina;
+	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_MaxStamina, Category = "Attribute|Vital")
+	FGameplayAttributeData MaxStamina;
 
 	void LifePostGameplayEffect() const;
 	void ManaPostGameplayEffect() const;
+	void StaminaPostGameplayEffect() const;
 #pragma endregion
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -115,7 +124,27 @@ private:
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_Wisdom, Category = "Attribute|Primary")
 	FGameplayAttributeData Wisdom;
 #pragma endregion
+
+// -----------------------------------------------------------------------------------------------------------------
+// Secondary Attributes
+// -----------------------------------------------------------------------------------------------------------------
+#pragma region Secondary Attributes
+public:
+	ATTRIBUTE_ACCESSORS(UXenAttributeSet, MovementSpeed);
+	ATTRIBUTE_ACCESSORS(UXenAttributeSet, MaxMovementSpeed);
 	
+protected:
+	UFUNCTION() void OnRep_MovementSpeed(const FGameplayAttributeData &OldValue) const;
+	UFUNCTION() void OnRep_MaxMovementSpeed(const FGameplayAttributeData &OldValue) const;
+	
+private:
+	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_MovementSpeed, Category = "Attribute|Secondary")
+	FGameplayAttributeData MovementSpeed;
+	
+	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_MaxMovementSpeed, Category = "Attribute|Secondary")
+	FGameplayAttributeData MaxMovementSpeed;
+#pragma endregion
+
 // -----------------------------------------------------------------------------------------------------------------
 // Meta Attributes
 // -----------------------------------------------------------------------------------------------------------------

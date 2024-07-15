@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemGlobals.h"
+#include "XenGameplayEffectContext.h"
 #include "XenAbilitySystemGlobals.generated.h"
 
 /**
@@ -13,6 +14,7 @@ UCLASS()
 class XENARTH_API UXenAbilitySystemGlobals : public UAbilitySystemGlobals
 {
 	GENERATED_BODY()
+public:
     UXenAbilitySystemGlobals();
-    virtual FGameplayEffectContext* AllocGameplayEffectContext() const override;
+    virtual FGameplayEffectContext* AllocGameplayEffectContext() const override { return new FXenGameplayEffectContext(); }
 };

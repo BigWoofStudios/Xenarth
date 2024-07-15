@@ -14,8 +14,3 @@ AXenPlayerState::AXenPlayerState()
 	
 	AttributeSet = CreateDefaultSubobject<UXenAttributeSet>(TEXT("AttributeSet"));
 }
-
-UAbilitySystemComponent* AXenPlayerState::GetAbilitySystemComponent() const
-{
-	return AbilitySystemComponent;
-}

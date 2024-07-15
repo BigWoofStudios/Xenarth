@@ -17,11 +17,7 @@ class XENARTH_API AXenCharacterBase : public ACharacter, public IAbilitySystemIn
 	GENERATED_BODY()
 public:
 	AXenCharacterBase();
-
-#pragma region IAbilitySystemInterface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
-#pragma endregion
-
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; };
 
 protected:
@@ -36,6 +32,9 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category=Attributes)
 	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category=Attributes)
+	TSubclassOf<UGameplayEffect> DefaultSecondaryAttributes;
 
 private:
 	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass, const float Level) const;

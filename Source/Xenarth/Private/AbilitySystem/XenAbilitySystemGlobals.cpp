@@ -3,14 +3,7 @@
 
 #include "AbilitySystem/XenAbilitySystemGlobals.h"
 
-#include "AbilitySystem/XenGameplayEffectContext.h"
-
 UXenAbilitySystemGlobals::UXenAbilitySystemGlobals()
 {
 	ReplicateActivationOwnedTags = true;
-}
-
-FGameplayEffectContext* UXenAbilitySystemGlobals::AllocGameplayEffectContext() const
-{
-	return new FXenGameplayEffectContext();
 }

@@ -16,6 +16,8 @@ UXenAttributeSet::UXenAttributeSet()
 	TagToAttribute.Add(FXenGameplayTags::Attribute_Vital_MaxLife, GetMaxLifeAttribute);
 	TagToAttribute.Add(FXenGameplayTags::Attribute_Vital_Mana, GetManaAttribute);
 	TagToAttribute.Add(FXenGameplayTags::Attribute_Vital_MaxMana, GetMaxManaAttribute);
+	TagToAttribute.Add(FXenGameplayTags::Attribute_Vital_Stamina, GetStaminaAttribute);
+	TagToAttribute.Add(FXenGameplayTags::Attribute_Vital_MaxStamina, GetMaxStaminaAttribute);
 #pragma endregion 
 	
 #pragma region Primary Attributes
@@ -26,6 +28,10 @@ UXenAttributeSet::UXenAttributeSet()
 	TagToAttribute.Add(FXenGameplayTags::Attribute_Primary_Wisdom, GetWisdomAttribute);
 #pragma endregion
 	
+#pragma region Secondary Attributes
+	TagToAttribute.Add(FXenGameplayTags::Attribute_Secondary_MovementSpeed, GetMovementSpeedAttribute);
+	TagToAttribute.Add(FXenGameplayTags::Attribute_Secondary_MaxMovementSpeed, GetMaxMovementSpeedAttribute);
+#pragma endregion
 }
 void UXenAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -35,6 +41,8 @@ void UXenAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, MaxLife, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, Mana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, Stamina, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, MaxStamina, COND_None, REPNOTIFY_Always);
 #pragma endregion
 	
 #pragma region Primary Attributes
@@ -43,7 +51,12 @@ void UXenAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, Vitality, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, Acuity, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, Wisdom, COND_None, REPNOTIFY_Always);
-#pragma endregion 
+#pragma endregion
+
+#pragma region Secondary Attributes
+	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, MovementSpeed, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, MaxMovementSpeed, COND_None, REPNOTIFY_Always);
+#pragma endregion
 }
 void UXenAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
@@ -51,7 +64,10 @@ void UXenAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, f
 	
 	if (Attribute == GetLifeAttribute()) NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxLife());
 	if (Attribute == GetManaAttribute()) NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxMana());
+	if (Attribute == GetStaminaAttribute()) NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxStamina());
+	if (Attribute == GetMovementSpeedAttribute()) NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxMovementSpeed());
 }
+
 void UXenAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
@@ -68,13 +84,26 @@ void UXenAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 	{
 		SetLife(FMath::Clamp(GetLife(), 0.f, GetMaxLife()));
 	}
-	LifePostGameplayEffect();
 	
 	if (TSet{GetManaAttribute(), GetMaxManaAttribute()}.Contains(Data.EvaluatedData.Attribute))
 	{
 		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
 	}
+
+	if (TSet{GetStaminaAttribute(), GetMaxStaminaAttribute()}.Contains(Data.EvaluatedData.Attribute))
+	{
+		SetStamina(FMath::Clamp(GetStamina(), 0.f, GetMaxStamina()));
+	}
+
+	if (TSet{GetMovementSpeedAttribute(), GetMaxMovementSpeedAttribute()}.Contains(Data.EvaluatedData.Attribute))
+	{
+		SetMovementSpeed(FMath::Clamp(GetMovementSpeed(), 0.f, GetMaxMovementSpeed()));
+	}
+
+	/* PostGameplayEffects */
+	LifePostGameplayEffect();
 	ManaPostGameplayEffect();
+	StaminaPostGameplayEffect();
 }
 void UXenAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props)
 {
@@ -105,6 +134,7 @@ void UXenAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData&
 		Props.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Props.TargetAvatarActor);
 	}
 }
+
 void UXenAttributeSet::DamagePostGameplayEffect(const FEffectProperties& Props)
 {
 	const float LocalIncomingDamage = GetIncomingDamage();
@@ -169,6 +199,7 @@ void UXenAttributeSet::LifePostGameplayEffect() const
 		UAbilitySystemBlueprintLibrary::RemoveLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Life_Full}, true);
 	}
 }
+
 void UXenAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldValue) const  { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Mana, OldValue); }
 void UXenAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldValue) const  { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, MaxMana, OldValue); }
 void UXenAttributeSet::ManaPostGameplayEffect() const
@@ -200,6 +231,38 @@ void UXenAttributeSet::ManaPostGameplayEffect() const
 		UAbilitySystemBlueprintLibrary::RemoveLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Mana_Full}, true);
 	}
 }
+
+void UXenAttributeSet::OnRep_Stamina(const FGameplayAttributeData& OldValue) const { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Stamina, OldValue); }
+void UXenAttributeSet::OnRep_MaxStamina(const FGameplayAttributeData& OldValue) const { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, MaxStamina, OldValue); }
+void UXenAttributeSet::StaminaPostGameplayEffect() const
+{
+	const UAbilitySystemComponent *ASC = GetOwningAbilitySystemComponent();
+	if (!ASC) return;
+
+	AActor* OwningActor = GetOwningActor();
+	if (!OwningActor) return;
+	
+	const bool bIsEmpty = ASC->HasMatchingGameplayTag(FXenGameplayTags::Status_Attribute_Stamina_Empty);
+	const bool bIsFull = ASC->HasMatchingGameplayTag(FXenGameplayTags::Status_Attribute_Stamina_Full);
+	
+	if (GetStamina() <= 0.f && !bIsEmpty)
+	{
+		UAbilitySystemBlueprintLibrary::AddLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Stamina_Empty}, true);
+	}
+	else if (GetStamina() > 0.f && bIsEmpty)
+	{
+		UAbilitySystemBlueprintLibrary::RemoveLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Stamina_Empty}, true);
+	}
+
+	if (GetStamina() >= GetMaxStamina() && !bIsFull)
+	{
+		UAbilitySystemBlueprintLibrary::AddLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Stamina_Full}, true);
+	}
+	else if (GetStamina() < GetMaxStamina() && bIsFull)
+	{
+		UAbilitySystemBlueprintLibrary::RemoveLooseGameplayTags(OwningActor, FGameplayTagContainer{FXenGameplayTags::Status_Attribute_Stamina_Full}, true);
+	}
+}
 #pragma endregion
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -211,4 +274,12 @@ void UXenAttributeSet::OnRep_Dexterity(const FGameplayAttributeData& OldValue) c
 void UXenAttributeSet::OnRep_Vitality(const FGameplayAttributeData& OldValue) const {GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Vitality, OldValue); }
 void UXenAttributeSet::OnRep_Acuity(const FGameplayAttributeData& OldValue) const {GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Acuity, OldValue); }
 void UXenAttributeSet::OnRep_Wisdom(const FGameplayAttributeData& OldValue) const {GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Wisdom, OldValue); }
+#pragma endregion
+
+// -----------------------------------------------------------------------------------------------------------------
+// Secondary Attributes
+// -----------------------------------------------------------------------------------------------------------------
+#pragma region Secondary Attributes
+void UXenAttributeSet::OnRep_MovementSpeed(const FGameplayAttributeData& OldValue) const { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, MovementSpeed, OldValue); }
+void UXenAttributeSet::OnRep_MaxMovementSpeed(const FGameplayAttributeData& OldValue) const { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, MaxMovementSpeed, OldValue); }
 #pragma endregion 

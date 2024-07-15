@@ -9,24 +9,18 @@
   <component name="ChangeListManager">
     <list default="true" id="df2fde30-93b8-4388-a0d2-abaaa4c7b63c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Xenarth.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Xenarth.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Enemy/BP_XenEnemyCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Enemy/BP_XenEnemyCharacter.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Player/BP_XenPlayerCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Player/BP_XenPlayerCharacter.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Game/BP_MainGameMode.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Game/BP_XenGameInstance.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Game/BP_XenGameInstance.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Game/BP_XenGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Game/BP_XenGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Game/BP_XenGameState.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Game/BP_XenGameState.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Player/BP_XenPlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Player/BP_XenPlayerController.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Player/BP_XenPlayerState.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Player/BP_XenPlayerState.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Xenarth/Private/AbilitySystem/XenAbilitySystemGlobals.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Private/AbilitySystem/XenAbilitySystemGlobals.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Xenarth/Private/AbilitySystem/XenAttributeSet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Private/AbilitySystem/XenAttributeSet.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Xenarth/Private/Character/XenCharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Private/Character/XenCharacterBase.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Xenarth/Private/Character/XenPlayerCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Private/Character/XenPlayerCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Xenarth/Public/Character/XenEnemyCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Public/Character/XenEnemyCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Xenarth/Public/Character/XenPlayerCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Public/Character/XenPlayerCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Xenarth/Public/Game/XenGameInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Public/Game/XenGameInstance.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Xenarth/Public/Game/XenGameModeBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Public/Game/XenGameModeBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Xenarth/Public/Game/XenGameStateBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Public/Game/XenGameStateBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Xenarth/Private/Player/XenPlayerState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Private/Player/XenPlayerState.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Xenarth/Private/XenGameplayTags.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Private/XenGameplayTags.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Xenarth/Public/AbilitySystem/XenAbilitySystemGlobals.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Public/AbilitySystem/XenAbilitySystemGlobals.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Xenarth/Public/AbilitySystem/XenAttributeSet.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Public/AbilitySystem/XenAttributeSet.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Xenarth/Public/Character/XenCharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Public/Character/XenCharacterBase.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Xenarth/Public/Player/XenPlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Public/Player/XenPlayerController.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Xenarth/Public/Player/XenPlayerState.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Public/Player/XenPlayerState.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Xenarth/Public/XenGameplayTags.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Xenarth/Public/XenGameplayTags.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -224,7 +218,7 @@
       <option name="presentableId" value="Default" />
       <updated>1720995805131</updated>
       <workItem from="1720995806504" duration="119000" />
-      <workItem from="1720995950168" duration="1038000" />
+      <workItem from="1720995950168" duration="6923000" />
     </task>
     <servers />
   </component>

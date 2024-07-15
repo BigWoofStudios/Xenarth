@@ -40,4 +40,5 @@ void AXenCharacterBase::InitializeDefaultAttributes() const
 {
 	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
 	ApplyEffectToSelf(DefaultPrimaryAttributes, 1.f);
+	ApplyEffectToSelf(DefaultSecondaryAttributes, 1.f);
 }

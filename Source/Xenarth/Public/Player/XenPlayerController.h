@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "AttributeSet.h"
 #include "GameplayTagContainer.h"
 #include "InputMappingContext.h"
 #include "Components/SplineComponent.h"
@@ -34,8 +35,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category=Input)
 	TObjectPtr<UInputMappingContext> XenInputMappingContext = nullptr;
 
-	UPROPERTY()
-	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent = nullptr;
+	UPROPERTY(VisibleAnywhere, Category=AbilitySystem) TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 	
 #pragma region Movement
 	UPROPERTY(EditAnywhere, Category="Input")
