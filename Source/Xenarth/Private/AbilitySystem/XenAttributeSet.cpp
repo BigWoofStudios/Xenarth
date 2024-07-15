@@ -33,6 +33,7 @@ UXenAttributeSet::UXenAttributeSet()
 	TagToAttribute.Add(FXenGameplayTags::Attribute_Secondary_MaxMovementSpeed, GetMaxMovementSpeedAttribute);
 #pragma endregion
 }
+
 void UXenAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -58,6 +59,7 @@ void UXenAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, MaxMovementSpeed, COND_None, REPNOTIFY_Always);
 #pragma endregion
 }
+
 void UXenAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
 	Super::PreAttributeChange(Attribute, NewValue);
@@ -105,6 +107,7 @@ void UXenAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 	ManaPostGameplayEffect();
 	StaminaPostGameplayEffect();
 }
+
 void UXenAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props)
 {
 	Props.EffectContextHandle = Data.EffectSpec.GetContext();
@@ -164,9 +167,9 @@ void UXenAttributeSet::DamagePostGameplayEffect(const FEffectProperties& Props)
 	// ShowFloatingText(Props, LocalIncomingDamage, bCriticalHit);
 }
 
-// -----------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 // Vital Attributes
-// -----------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 #pragma region Vital Attributes
 void UXenAttributeSet::OnRep_Life(const FGameplayAttributeData& OldValue) const  { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Life, OldValue); }
 void UXenAttributeSet::OnRep_MaxLife(const FGameplayAttributeData& OldValue) const  { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, MaxLife, OldValue); }
@@ -265,9 +268,9 @@ void UXenAttributeSet::StaminaPostGameplayEffect() const
 }
 #pragma endregion
 
-// -----------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 // Primary Attributes
-// -----------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 #pragma region Primary Attributes
 void UXenAttributeSet::OnRep_Power(const FGameplayAttributeData& OldValue) const {GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Power, OldValue); }
 void UXenAttributeSet::OnRep_Dexterity(const FGameplayAttributeData& OldValue) const {GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Dexterity, OldValue); }
@@ -276,9 +279,9 @@ void UXenAttributeSet::OnRep_Acuity(const FGameplayAttributeData& OldValue) cons
 void UXenAttributeSet::OnRep_Wisdom(const FGameplayAttributeData& OldValue) const {GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, Wisdom, OldValue); }
 #pragma endregion
 
-// -----------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 // Secondary Attributes
-// -----------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 #pragma region Secondary Attributes
 void UXenAttributeSet::OnRep_MovementSpeed(const FGameplayAttributeData& OldValue) const { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, MovementSpeed, OldValue); }
 void UXenAttributeSet::OnRep_MaxMovementSpeed(const FGameplayAttributeData& OldValue) const { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, MaxMovementSpeed, OldValue); }
