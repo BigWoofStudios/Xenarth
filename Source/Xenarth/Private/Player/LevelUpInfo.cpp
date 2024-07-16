@@ -6,21 +6,9 @@
 int32 ULevelUpInfo::FindLevelForXP(const int32 InXP) const
 {
 	int32 Level = 1;
-	bool bSearching = true;
-	while (bSearching)
+	while (Level < LevelUpInformation.Num() && InXP >= LevelUpInformation[Level].XPRequirement)
 	{
-		// LevelUpInformation[1] = Level 1 Information
-		// LevelUpInformation[2] = Level 2 Information
-		if (LevelUpInformation.Num() - 1 <= Level) return Level;
-
-		if (InXP >= LevelUpInformation[Level].XPRequirement)
-		{
-			++Level;
-		}
-		else
-		{
-			bSearching = false;
-		}
+		++Level;
 	}
 	return Level;
 }
