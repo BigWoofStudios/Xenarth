@@ -35,8 +35,14 @@ void AXenPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME_WITH_PARAMS_FAST(ThisClass, SkillPoints, Parameters);
 }
 
-void AXenPlayerState::IncreaseCharacterXP_Implementation(const int32 InXP)
+void AXenPlayerState::IncreaseCharacterXP(const int32 InXP)
 {
+	if (!HasAuthority())
+	{
+		UE_LOG(LogXen, Warning, TEXT("Attemping to increase character XP on the client."));
+		return;
+	}
+	
 	CharacterXP += InXP;
 	MARK_PROPERTY_DIRTY_FROM_NAME(ThisClass, CharacterXP, this);
 	

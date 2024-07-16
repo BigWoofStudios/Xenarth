@@ -5,22 +5,37 @@
 
 int32 ULevelUpInfo::FindLevelForXP(const int32 InXP) const
 {
-	int32 Level = 1;
-	bool bSearching = true;
-	while (bSearching)
-	{
-		// LevelUpInformation[1] = Level 1 Information
-		// LevelUpInformation[2] = Level 1 Information
-		if (LevelUpInformation.Num() - 1 <= Level) return Level;
+	int32 Low = 1;
+	int32 High = LevelUpInformation.Num() - 1;
 
-		if (InXP >= LevelUpInformation[Level].XPRequirement)
+	while (Low <= High)
+	{
+		const int32 Mid = (Low + High) / 2;
+
+		if (LevelUpInformation[Mid].XPRequirement == InXP)
 		{
-			++Level;
+			return Mid;
+		}
+		
+		if (LevelUpInformation[Mid].XPRequirement < InXP)
+		{
+			Low = Mid + 1;
 		}
 		else
 		{
-			bSearching = false;
+			High = Mid - 1;
 		}
 	}
-	return Level;
+
+	return Low;
+}
+
+int32 ULevelUpInfo::FindRequiredXPForNextLevel(const int32 InLevel) const
+{
+	if (LevelUpInformation.IsValidIndex(InLevel + 1))
+	{
+		return LevelUpInformation[InLevel + 1].XPRequirement;
+	}
+
+	return MAX_int32;
 }

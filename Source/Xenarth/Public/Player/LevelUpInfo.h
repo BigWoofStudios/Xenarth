@@ -35,4 +35,5 @@ public:
 	TArray<FXenLevelUpInfo> LevelUpInformation;
 	
 	int32 FindLevelForXP(const int32 InXP) const;
+	int32 FindRequiredXPForNextLevel(const int32 InLevel) const;
 };

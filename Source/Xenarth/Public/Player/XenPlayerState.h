@@ -51,7 +51,6 @@ public:
 	UFUNCTION(BlueprintGetter, Category="PlayerState Data|Accessors")
 	FORCEINLINE int32 GetSkillPoints() const { return SkillPoints; }
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void IncreaseCharacterXP(const int32 InXP);
 
 	/*
