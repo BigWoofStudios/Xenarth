@@ -33,7 +33,6 @@ void AXenCharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& Ga
 	const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffectClass, Level, ContextHandle);
 	ContextHandle.AddSourceObject(this);
 	AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), AbilitySystemComponent);
-
 }
 
 void AXenCharacterBase::InitializeDefaultAttributes() const

@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/XenAbilitySystemComponent.h"
 #include "AbilitySystem/XenAttributeSet.h"
+#include "Net/UnrealNetwork.h"
 
 AXenPlayerState::AXenPlayerState()
 {
@@ -14,3 +15,15 @@ AXenPlayerState::AXenPlayerState()
 	
 	AttributeSet = CreateDefaultSubobject<UXenAttributeSet>(TEXT("AttributeSet"));
 }
+
+void AXenPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	FDoRepLifetimeParams Parameters;
+	
+	Parameters.bIsPushBased = true;
+	Parameters.RepNotifyCondition = REPNOTIFY_OnChanged;
+	
+	DOREPLIFETIME_WITH_PARAMS_FAST(ThisClass, CharacterName, Parameters);
+}
+

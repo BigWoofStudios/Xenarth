@@ -19,10 +19,16 @@ class XENARTH_API AXenPlayerState : public APlayerState, public IAbilitySystemIn
 	GENERATED_BODY()
 public:
 	AXenPlayerState();
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+
+	UFUNCTION(BlueprintCallable) FText GetCharacterName() { return CharacterName; }
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category=AbilitySystem) TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 	UPROPERTY(VisibleAnywhere, Category=AbilitySystem) TObjectPtr<UAttributeSet> AttributeSet;
+
+	UPROPERTY(VisibleAnywhere, Replicated) FText CharacterName = FText();
 };
