@@ -131,18 +131,13 @@ private:
 #pragma region Secondary Attributes
 public:
 	ATTRIBUTE_ACCESSORS(UXenAttributeSet, MovementSpeed);
-	ATTRIBUTE_ACCESSORS(UXenAttributeSet, MaxMovementSpeed);
 	
 protected:
 	UFUNCTION() void OnRep_MovementSpeed(const FGameplayAttributeData &OldValue) const;
-	UFUNCTION() void OnRep_MaxMovementSpeed(const FGameplayAttributeData &OldValue) const;
 	
 private:
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_MovementSpeed, Category = "Attribute|Secondary")
 	FGameplayAttributeData MovementSpeed;
-	
-	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_MaxMovementSpeed, Category = "Attribute|Secondary")
-	FGameplayAttributeData MaxMovementSpeed;
 #pragma endregion
 
 // -----------------------------------------------------------------------------------------------------------------

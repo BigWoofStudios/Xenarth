@@ -30,7 +30,6 @@ UXenAttributeSet::UXenAttributeSet()
 	
 #pragma region Secondary Attributes
 	TagToAttribute.Add(FXenGameplayTags::Attribute_Secondary_MovementSpeed, GetMovementSpeedAttribute);
-	TagToAttribute.Add(FXenGameplayTags::Attribute_Secondary_MaxMovementSpeed, GetMaxMovementSpeedAttribute);
 #pragma endregion
 }
 
@@ -56,7 +55,6 @@ void UXenAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 #pragma region Secondary Attributes
 	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, MovementSpeed, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UXenAttributeSet, MaxMovementSpeed, COND_None, REPNOTIFY_Always);
 #pragma endregion
 }
 
@@ -67,7 +65,6 @@ void UXenAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, f
 	if (Attribute == GetLifeAttribute()) NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxLife());
 	if (Attribute == GetManaAttribute()) NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxMana());
 	if (Attribute == GetStaminaAttribute()) NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxStamina());
-	if (Attribute == GetMovementSpeedAttribute()) NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxMovementSpeed());
 }
 
 void UXenAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
@@ -95,11 +92,6 @@ void UXenAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 	if (TSet{GetStaminaAttribute(), GetMaxStaminaAttribute()}.Contains(Data.EvaluatedData.Attribute))
 	{
 		SetStamina(FMath::Clamp(GetStamina(), 0.f, GetMaxStamina()));
-	}
-
-	if (TSet{GetMovementSpeedAttribute(), GetMaxMovementSpeedAttribute()}.Contains(Data.EvaluatedData.Attribute))
-	{
-		SetMovementSpeed(FMath::Clamp(GetMovementSpeed(), 0.f, GetMaxMovementSpeed()));
 	}
 
 	/* PostGameplayEffects */
@@ -284,5 +276,4 @@ void UXenAttributeSet::OnRep_Wisdom(const FGameplayAttributeData& OldValue) cons
 // ---------------------------------------------------------------------------------------------------------------------
 #pragma region Secondary Attributes
 void UXenAttributeSet::OnRep_MovementSpeed(const FGameplayAttributeData& OldValue) const { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, MovementSpeed, OldValue); }
-void UXenAttributeSet::OnRep_MaxMovementSpeed(const FGameplayAttributeData& OldValue) const { GAMEPLAYATTRIBUTE_REPNOTIFY(UXenAttributeSet, MaxMovementSpeed, OldValue); }
 #pragma endregion 
