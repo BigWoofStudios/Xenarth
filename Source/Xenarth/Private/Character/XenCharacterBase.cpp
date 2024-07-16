@@ -4,6 +4,8 @@
 #include "Character/XenCharacterBase.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/XenAbilitySystemLibrary.h"
+#include "AbilitySystem/XenAttributeSet.h"
 #include "AbilitySystem/XenGameplayEffectContext.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -22,6 +24,18 @@ AXenCharacterBase::AXenCharacterBase()
 void AXenCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+	if (const UXenAttributeSet* XenAttributeSet = Cast<UXenAttributeSet>(AttributeSet))
+	{
+		/* Change character's `Max<EMovementMode>Speed` based on MovementSpeed attribute. */
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XenAttributeSet->GetMovementSpeedAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+				GetCharacterMovement()->MaxWalkSpeed = Data.NewValue;
+				GetCharacterMovement()->MaxSwimSpeed = Data.NewValue;
+				GetCharacterMovement()->MaxFlySpeed = Data.NewValue;
+			}
+		);
+	}
 }
 
 void AXenCharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass, const float Level) const
@@ -37,7 +51,7 @@ void AXenCharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& Ga
 
 void AXenCharacterBase::InitializeDefaultAttributes() const
 {
-	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
 	ApplyEffectToSelf(DefaultPrimaryAttributes, 1.f);
+	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttributes, 1.f);
 }

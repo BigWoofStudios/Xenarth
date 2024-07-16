@@ -65,6 +65,7 @@ void UXenAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, f
 	if (Attribute == GetLifeAttribute()) NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxLife());
 	if (Attribute == GetManaAttribute()) NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxMana());
 	if (Attribute == GetStaminaAttribute()) NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxStamina());
+	if (Attribute == GetMovementSpeedAttribute()) NewValue = FMath::Clamp(NewValue, 0.0f, AbsoluteMaxMovementSpeed);
 }
 
 void UXenAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
@@ -92,6 +93,11 @@ void UXenAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 	if (TSet{GetStaminaAttribute(), GetMaxStaminaAttribute()}.Contains(Data.EvaluatedData.Attribute))
 	{
 		SetStamina(FMath::Clamp(GetStamina(), 0.f, GetMaxStamina()));
+	}
+	
+	if (Data.EvaluatedData.Attribute == GetMovementSpeedAttribute())
+	{
+		SetMovementSpeed(FMath::Clamp(GetMovementSpeed(), 0.f, AbsoluteMaxMovementSpeed));
 	}
 
 	/* PostGameplayEffects */

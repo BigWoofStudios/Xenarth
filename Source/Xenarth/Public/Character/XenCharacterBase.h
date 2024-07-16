@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "Abilities/GameplayAbility.h"
+#include "Data/CharacterClassInfo.h"
 #include "GameFramework/Character.h"
 #include "XenCharacterBase.generated.h"
 
@@ -24,19 +26,29 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void InitAbilityActorInfo() {/* Used in inherited classes. */};
-	UPROPERTY(VisibleAnywhere) TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
-	UPROPERTY(VisibleAnywhere) TObjectPtr<UAttributeSet> AttributeSet;
+	virtual void InitializeDefaultAttributes() const;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category=Attributes)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Defaults")
+	ECharacterClass CharacterClass = ECharacterClass::None;
+	
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Ability System")
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+	
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Ability System")
+	TObjectPtr<UAttributeSet> AttributeSet;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Ability System")
 	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
 	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category=Attributes)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Ability System")
 	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category=Attributes)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Ability System")
 	TSubclassOf<UGameplayEffect> DefaultSecondaryAttributes;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Ability System")
+	TSubclassOf<UGameplayAbility> DefaultAbilities;
 
 private:
 	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass, const float Level) const;
-	void InitializeDefaultAttributes() const;
 };

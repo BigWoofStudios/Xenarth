@@ -138,6 +138,12 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_MovementSpeed, Category = "Attribute|Secondary")
 	FGameplayAttributeData MovementSpeed;
+
+	/*
+	 * A hardcoded, absolute max the MovementSpeed can ever be. This value doesn't ever change and is the upper limit
+	 * for any character's movement speed regardless of gameplay effects.
+	 */
+	float AbsoluteMaxMovementSpeed = 1000.0f;
 #pragma endregion
 
 // -----------------------------------------------------------------------------------------------------------------

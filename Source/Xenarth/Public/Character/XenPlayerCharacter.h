@@ -23,13 +23,11 @@ public:
 	
 	// Called on the client when the player state is replicated.
 	virtual void OnRep_PlayerState() override;
+
+protected:
+	virtual void InitAbilityActorInfo() override;
 	
 private:
-	void InitAbilityActorInfo();
-	
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UCameraComponent> TopDownCameraComponent;
-
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USpringArmComponent> CameraBoom;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<UCameraComponent> Camera;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<USpringArmComponent> SpringArm;
 };

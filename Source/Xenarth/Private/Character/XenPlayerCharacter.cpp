@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Player/XenPlayerController.h"
 #include "Player/XenPlayerState.h"
 
 AXenPlayerCharacter::AXenPlayerCharacter()
@@ -15,16 +16,16 @@ AXenPlayerCharacter::AXenPlayerCharacter()
 	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
 	GetMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 	
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>("CameraBoom");
-	CameraBoom->SetupAttachment(GetRootComponent());
-	CameraBoom->SetUsingAbsoluteRotation(true);
-	CameraBoom->bDoCollisionTest = false;
-	CameraBoom->TargetArmLength = 850.f;
-	CameraBoom->SetWorldRotation(FRotator(-60.0f, 0.0f, 0.0f));
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
+	SpringArm->SetupAttachment(GetRootComponent());
+	SpringArm->SetUsingAbsoluteRotation(true);
+	SpringArm->bDoCollisionTest = false;
+	SpringArm->TargetArmLength = 850.f;
+	SpringArm->SetWorldRotation(FRotator(-60.0f, 0.0f, 0.0f));
 
-	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>("TopDownCameraComponent");
-	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	TopDownCameraComponent->bUsePawnControlRotation = false;
+	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
+	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
+	Camera->bUsePawnControlRotation = false;
 	
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->bConstrainToPlane = true;
@@ -57,4 +58,15 @@ void AXenPlayerCharacter::InitAbilityActorInfo()
 	
 	AbilitySystemComponent = XenPlayerState->GetAbilitySystemComponent();
 	AttributeSet = XenPlayerState->GetAttributeSet();
+	// TODO: broadcast ASC registered event
+	// OnAscRegistered.Broadcast(AbilitySystemComponent);
+
+	if (AXenPlayerController* XenPlayerController = Cast<AXenPlayerController>(GetController()))
+	{
+		// TODO: Get HUD initialized
+		// if (AXenHUD* XenHUD = Cast<AXenHUD>(XenPlayerController->GetHUD()))
+		// {
+		// 	XenHUD->InitOverlay(XenPlayerController, XenPlayerState, AbilitySystemComponent, AttributeSet);
+		// }
+	}
 }

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
-#include "AttributeSet.h"
 #include "GameplayTagContainer.h"
 #include "InputMappingContext.h"
 #include "Components/SplineComponent.h"
@@ -56,6 +55,6 @@ private:
 	UPROPERTY(VisibleAnywhere, Category=Movement) TObjectPtr<USplineComponent> MovementSpline = nullptr;
 	UPROPERTY(VisibleAnywhere, Category=Movement) bool bAutoRunning = false;
 	UPROPERTY(VisibleAnywhere, Replicated, Category=Movement) bool bCanMove = true;
-	UPROPERTY(VisibleAnywhere, Category=Movement) FGameplayTagContainer BlockMovementTags = FGameplayTagContainer();
+	UPROPERTY(EditDefaultsOnly, Category=Movement) FGameplayTagContainer BlockMovementTags = FGameplayTagContainer();
 #pragma endregion
 };

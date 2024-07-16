@@ -3,6 +3,7 @@
 
 #include "Character/XenEnemyCharacter.h"
 
+#include "XenGameplayTags.h"
 #include "AbilitySystem/XenAbilitySystemComponent.h"
 #include "AbilitySystem/XenAttributeSet.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -26,4 +27,22 @@ void AXenEnemyCharacter::BeginPlay()
 	Super::BeginPlay();
 	checkf(AbilitySystemComponent, TEXT("AbilitySystemComponent is null in AXenEnemyCharacter::BeginPlay"));
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+}
+
+void AXenEnemyCharacter::InitAbilityActorInfo()
+{
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	// TODO: Cast<UXenAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+
+
+	if (HasAuthority())
+	{
+		InitializeDefaultAttributes();		
+	}
+	// TODO: OnAscRegistered.Broadcast(AbilitySystemComponent);
+}
+
+void AXenEnemyCharacter::InitializeDefaultAttributes() const
+{
+	// TODO: Call a custom ability system BP library to InitializeDefaultAttributes with character details...
 }
