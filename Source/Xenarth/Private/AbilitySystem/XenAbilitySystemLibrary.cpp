@@ -3,6 +3,8 @@
 
 #include "AbilitySystem/XenAbilitySystemLibrary.h"
 
+#include "AbilitySystemComponent.h"
+#include "AbilitySystem/XenGameplayEffectContext.h"
 #include "Game/XenGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 

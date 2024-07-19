@@ -5,6 +5,7 @@
 
 #include "XenGameplayTags.h"
 #include "AbilitySystem/XenAbilitySystemComponent.h"
+#include "AbilitySystem/XenAbilitySystemLibrary.h"
 #include "AbilitySystem/XenAttributeSet.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -32,7 +33,7 @@ void AXenEnemyCharacter::BeginPlay()
 void AXenEnemyCharacter::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
-	// TODO: Cast<UXenAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+	Cast<UXenAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 
 
 	if (HasAuthority())
@@ -44,5 +45,5 @@ void AXenEnemyCharacter::InitAbilityActorInfo()
 
 void AXenEnemyCharacter::InitializeDefaultAttributes() const
 {
-	// TODO: Call a custom ability system BP library to InitializeDefaultAttributes with character details...
+	UXenAbilitySystemLibrary::InitializeDefaultAttributes(this, CharacterClass, CharacterLevel, AbilitySystemComponent);
 }

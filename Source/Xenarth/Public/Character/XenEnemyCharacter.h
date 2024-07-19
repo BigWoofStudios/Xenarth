@@ -21,4 +21,7 @@ protected:
 	
 	virtual void InitAbilityActorInfo() override;
 	virtual void InitializeDefaultAttributes() const override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Defaults")
+	int32 CharacterLevel = 1;
 };

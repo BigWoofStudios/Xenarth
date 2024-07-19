@@ -39,14 +39,16 @@ void AXenPlayerState::IncreaseCharacterXP(const int32 InXP)
 {
 	if (!HasAuthority())
 	{
-		UE_LOG(LogXen, Warning, TEXT("Attemping to increase character XP on the client."));
+		UE_LOG(LogXen, Warning, TEXT("Attemping to increase character XP on the client. Run IncreaseCharacterXP on the server."));
 		return;
 	}
 	
 	CharacterXP += InXP;
 	MARK_PROPERTY_DIRTY_FROM_NAME(ThisClass, CharacterXP, this);
-	
-	if (const int32 InCharacterLevel = LevelUpInfo->FindLevelForXP(CharacterXP); InCharacterLevel != CharacterLevel)
+
+	// When increasing XP, check if the character has leveled up
+	const int32 InCharacterLevel = LevelUpInfo->FindLevelForXP(CharacterXP);
+	if (InCharacterLevel != CharacterLevel)
 	{
 		CharacterLevel = InCharacterLevel;
 		MARK_PROPERTY_DIRTY_FROM_NAME(ThisClass, CharacterLevel, this);

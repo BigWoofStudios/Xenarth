@@ -4,11 +4,13 @@
 #include "Character/XenPlayerCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/XenAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Player/XenPlayerController.h"
 #include "Player/XenPlayerState.h"
+#include "UI/HUD/XenHUD.h"
 
 AXenPlayerCharacter::AXenPlayerCharacter()
 {
@@ -39,34 +41,38 @@ AXenPlayerCharacter::AXenPlayerCharacter()
 void AXenPlayerCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-	// Init on server
-	InitAbilityActorInfo();
+	InitAbilityActorInfo(); // Init on server
 }
 
 void AXenPlayerCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
-	// Init on client
-	InitAbilityActorInfo();
+	InitAbilityActorInfo(); // Init on client
 }
 
 void AXenPlayerCharacter::InitAbilityActorInfo()
 {
 	AXenPlayerState* XenPlayerState = GetPlayerState<AXenPlayerState>();
 	checkf(XenPlayerState, TEXT("AXenPlayerCharacter::PossessedBy: PlayerState is not of type AXenPlayerState"));
+	// Informs the ASC of the Actor that it is bound to, which is the player character in this case 
 	XenPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(XenPlayerState, this);
-	
 	AbilitySystemComponent = XenPlayerState->GetAbilitySystemComponent();
 	AttributeSet = XenPlayerState->GetAttributeSet();
-	// TODO: broadcast ASC registered event
-	// OnAscRegistered.Broadcast(AbilitySystemComponent);
 
+	Cast<UXenAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+	// TODO: OnAscRegistered.Broadcast(AbilitySystemComponent);
+
+	// TODO: InitializeDefaultAttributes from saved progress in a function called LoadProgress called in PossessedBy
+	if (HasAuthority())
+	{
+		InitializeDefaultAttributes();		
+	}
+	
 	if (AXenPlayerController* XenPlayerController = Cast<AXenPlayerController>(GetController()))
 	{
-		// TODO: Get HUD initialized
-		// if (AXenHUD* XenHUD = Cast<AXenHUD>(XenPlayerController->GetHUD()))
-		// {
-		// 	XenHUD->InitOverlay(XenPlayerController, XenPlayerState, AbilitySystemComponent, AttributeSet);
-		// }
+		if (AXenHUD* XenHUD = Cast<AXenHUD>(XenPlayerController->GetHUD()))
+		{
+			XenHUD->InitializeOverlay(XenPlayerController, XenPlayerState, AbilitySystemComponent, AttributeSet);
+		}
 	}
 }
