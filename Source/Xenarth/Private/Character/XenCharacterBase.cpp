@@ -4,7 +4,6 @@
 #include "Character/XenCharacterBase.h"
 
 #include "AbilitySystemComponent.h"
-#include "AbilitySystem/XenAbilitySystemLibrary.h"
 #include "AbilitySystem/XenAttributeSet.h"
 #include "AbilitySystem/XenGameplayEffectContext.h"
 #include "Components/CapsuleComponent.h"
@@ -26,16 +25,20 @@ void AXenCharacterBase::BeginPlay()
 	Super::BeginPlay();
 	if (const UXenAttributeSet* XenAttributeSet = Cast<UXenAttributeSet>(AttributeSet))
 	{
-		/* Change character's `Max<EMovementMode>Speed` based on MovementSpeed attribute. */
-		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XenAttributeSet->GetMovementSpeedAttribute()).AddLambda(
-			[this](const FOnAttributeChangeData& Data)
-			{
-				GetCharacterMovement()->MaxWalkSpeed = Data.NewValue;
-				GetCharacterMovement()->MaxSwimSpeed = Data.NewValue;
-				GetCharacterMovement()->MaxFlySpeed = Data.NewValue;
-			}
-		);
+		SR_SetMovementSpeed();
+		if (HasAuthority())
+		{
+			/* Change character's `Max<EMovementMode>Speed` based on MovementSpeed attribute. */
+			AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XenAttributeSet->GetMovementSpeedAttribute()).AddLambda(
+				[this](const FOnAttributeChangeData& Data)
+				{
+					SetMovementSpeed(Data.NewValue);
+					MC_SetMovementSpeed(Data.NewValue);
+				}
+			);
+		}
 	}
+	
 }
 
 void AXenCharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass, const float Level) const
@@ -47,6 +50,28 @@ void AXenCharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& Ga
 	const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffectClass, Level, ContextHandle);
 	ContextHandle.AddSourceObject(this);
 	AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), AbilitySystemComponent);
+}
+
+void AXenCharacterBase::SetMovementSpeed(const float InMovementSpeed) const
+{
+	GetCharacterMovement()->MaxWalkSpeed = InMovementSpeed;
+	GetCharacterMovement()->MaxSwimSpeed = InMovementSpeed;
+	GetCharacterMovement()->MaxFlySpeed = InMovementSpeed;
+}
+
+void AXenCharacterBase::SR_SetMovementSpeed_Implementation()
+{
+	if (const UXenAttributeSet* XenAttributeSet = Cast<UXenAttributeSet>(AttributeSet))
+	{
+		const float MovementSpeed = XenAttributeSet->GetMovementSpeed();
+		SetMovementSpeed(MovementSpeed);
+		MC_SetMovementSpeed(MovementSpeed);
+	}
+}
+
+void AXenCharacterBase::MC_SetMovementSpeed_Implementation(const float InMovementSpeed)
+{
+	SetMovementSpeed(InMovementSpeed);
 }
 
 void AXenCharacterBase::InitializeDefaultAttributes() const

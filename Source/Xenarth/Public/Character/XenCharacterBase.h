@@ -51,4 +51,12 @@ protected:
 
 private:
 	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass, const float Level) const;
+
+	void SetMovementSpeed(const float InMovementSpeed) const;
+	
+	UFUNCTION(Server, Reliable)
+	void SR_SetMovementSpeed();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MC_SetMovementSpeed(const float InMovementSpeed);
 };
