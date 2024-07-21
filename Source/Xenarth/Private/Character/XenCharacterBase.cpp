@@ -38,7 +38,6 @@ void AXenCharacterBase::BeginPlay()
 			);
 		}
 	}
-	
 }
 
 void AXenCharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass, const float Level) const

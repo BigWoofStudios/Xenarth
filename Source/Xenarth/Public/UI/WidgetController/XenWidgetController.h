@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Character/XenCharacterBase.h"
 #include "XenWidgetController.generated.h"
 
 class UXenAttributeSet;
@@ -46,9 +47,13 @@ public:
 	virtual void BroadcastInitialValues() { /* Used in inherited classes. */ };
 	virtual void BindCallbacksToDependencies() { /* Used in inherited classes. */ };
 
+	UFUNCTION(BlueprintPure)
 	AXenPlayerController* GetXenPlayerController() const { return XenPlayerController; }
+	UFUNCTION(BlueprintPure)
 	AXenPlayerState* GetXenPlayerState() const { return XenPlayerState; }
+	UFUNCTION(BlueprintPure)
 	UXenAbilitySystemComponent* GetXenAbilitySystemComponent() const { return XenAbilitySystemComponent; }
+	UFUNCTION(BlueprintPure)
 	UXenAttributeSet* GetXenAttributeSet() const { return XenAttributeSet; }
 	
 protected:
