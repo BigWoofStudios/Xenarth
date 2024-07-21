@@ -75,35 +75,33 @@ void UXenAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 	FEffectProperties Props;
 	SetEffectProperties(Data, Props);
 
-	if (GetIncomingDamageAttribute() == Data.EvaluatedData.Attribute)
+	if (Data.EvaluatedData.Attribute == GetLifeAttribute())
+	{
+		SetLife(FMath::Clamp(GetLife(), 0.f, GetMaxLife()));
+	}
+	LifePostGameplayEffect();
+
+	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
 	{
 		DamagePostGameplayEffect(Props);
 	}
 	
-	if (TSet{GetLifeAttribute(), GetMaxLifeAttribute()}.Contains(Data.EvaluatedData.Attribute))
-	{
-		SetLife(FMath::Clamp(GetLife(), 0.f, GetMaxLife()));
-	}
-	
-	if (TSet{GetManaAttribute(), GetMaxManaAttribute()}.Contains(Data.EvaluatedData.Attribute))
+	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{
 		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
 	}
-
-	if (TSet{GetStaminaAttribute(), GetMaxStaminaAttribute()}.Contains(Data.EvaluatedData.Attribute))
+	ManaPostGameplayEffect();
+	
+	if (Data.EvaluatedData.Attribute == GetStaminaAttribute())
 	{
 		SetStamina(FMath::Clamp(GetStamina(), 0.f, GetMaxStamina()));
 	}
+	StaminaPostGameplayEffect();
 	
 	if (Data.EvaluatedData.Attribute == GetMovementSpeedAttribute())
 	{
 		SetMovementSpeed(FMath::Clamp(GetMovementSpeed(), 0.f, AbsoluteMaxMovementSpeed));
 	}
-
-	/* PostGameplayEffects */
-	LifePostGameplayEffect();
-	ManaPostGameplayEffect();
-	StaminaPostGameplayEffect();
 }
 
 void UXenAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props)

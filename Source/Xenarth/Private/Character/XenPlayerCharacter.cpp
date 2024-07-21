@@ -42,6 +42,8 @@ void AXenPlayerCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 	InitAbilityActorInfo(); // Init on server
+	// TODO: InitializeDefaultAttributes from saved progress in a function called LoadProgress called in PossessedBy
+	InitializeDefaultAttributes();
 }
 
 void AXenPlayerCharacter::OnRep_PlayerState()
@@ -58,15 +60,9 @@ void AXenPlayerCharacter::InitAbilityActorInfo()
 	XenPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(XenPlayerState, this);
 	AbilitySystemComponent = XenPlayerState->GetAbilitySystemComponent();
 	AttributeSet = XenPlayerState->GetAttributeSet();
-
+	
 	Cast<UXenAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 	// TODO: OnAscRegistered.Broadcast(AbilitySystemComponent);
-
-	// TODO: InitializeDefaultAttributes from saved progress in a function called LoadProgress called in PossessedBy
-	if (HasAuthority())
-	{
-		InitializeDefaultAttributes();		
-	}
 	
 	if (AXenPlayerController* XenPlayerController = Cast<AXenPlayerController>(GetController()))
 	{

@@ -9,8 +9,10 @@ void UOverlayWidgetController::BroadcastInitialValues()
 {
 	OnLifeChanged.Broadcast(GetXenAttributeSet()->GetLife());
 	OnMaxLifeChanged.Broadcast(GetXenAttributeSet()->GetMaxLife());
-	OnManaChanged.Broadcast(GetXenAttributeSet()->GetMana());
 	OnMaxManaChanged.Broadcast(GetXenAttributeSet()->GetMaxMana());
+	OnManaChanged.Broadcast(GetXenAttributeSet()->GetMana());
+	OnMaxStaminaChanged.Broadcast(GetXenAttributeSet()->GetMaxStamina());
+	OnStaminaChanged.Broadcast(GetXenAttributeSet()->GetStamina());
 }
 
 void UOverlayWidgetController::BindCallbacksToDependencies()
@@ -21,7 +23,6 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 				OnLifeChanged.Broadcast(Data.NewValue);
 			}
 		);
-
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GetXenAttributeSet()->GetMaxLifeAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data)
 			{
@@ -35,11 +36,23 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 				OnManaChanged.Broadcast(Data.NewValue);
 			}
 		);
-
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GetXenAttributeSet()->GetMaxManaAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data)
 			{
 				OnMaxManaChanged.Broadcast(Data.NewValue);
+			}
+		);
+
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GetXenAttributeSet()->GetStaminaAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+				OnStaminaChanged.Broadcast(Data.NewValue);
+			}
+		);
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GetXenAttributeSet()->GetMaxStaminaAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+				OnMaxStaminaChanged.Broadcast(Data.NewValue);
 			}
 		);
 }
